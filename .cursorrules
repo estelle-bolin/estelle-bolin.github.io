@@ -1,0 +1,37 @@
+## Design System — Stella Portfolio
+
+### Colors
+- Background: #F8F8F4
+- Text: #1A1A16
+- Accent: #4A7C59
+- Surface: #E8EBE4
+
+### Typography
+- Headlines: Cormorant Garamond, serif
+- Body: system-ui, sans-serif
+- H1: 4rem
+- H2: 2rem
+- H3: 1.25rem
+- Body: 1rem, line-height 1.7
+
+### Spacing
+- Section padding: 120px vertical
+- Card gap: 24px
+- Max content width: 1100px
+- Page margin: 48px horizontal
+
+### Components
+- Card border-radius: 12px
+- Button border-radius: 24px
+- Button style: outlined, 1px solid accent, transparent background
+
+### Accessibility
+- WCAG 2.2 Level AA at all times
+- prefers-reduced-motion always respected
+- Visible focus indicators always on
+- Semantic HTML always
+
+### Tone
+- Minimalist, lots of whitespace
+- No decorative elements unless intentional
+- Reference aesthetic: mattfredette.com

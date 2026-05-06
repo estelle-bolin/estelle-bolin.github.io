@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <meta
+      name="description"
+      content="Beyond the Case Studies — a selection of UX and product design projects by Estelle across B2B software, healthcare technology, and high-end consumer brands."
+    />
+    <title>Beyond the Case Studies | Estelle</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      /* ─── Back link ─────────────────────────────────────────── */
+      .case-back-link {
+        display: inline-block;
+        margin-bottom: 2rem;
+        font-size: 0.88rem;
+        color: var(--accent);
+        font-weight: 500;
+        letter-spacing: 0.01em;
+        text-decoration: none;
+      }
+      .case-back-link:hover { opacity: 0.75; }
+
+      .case-eyebrow {
+        margin: 0 0 1rem;
+        font-size: 0.88rem;
+        color: var(--accent);
+        text-transform: lowercase;
+        letter-spacing: 0.01em;
+      }
+
+      /* ─── Hero ──────────────────────────────────────────────── */
+      .beyond-hero {
+        padding: clamp(3rem, 7vw, 6.5rem) clamp(1.25rem, 5vw, 4rem) clamp(2rem, 4vw, 3rem);
+      }
+      .beyond-hero-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .beyond-hero h1 {
+        margin: 0 0 1rem;
+        font-family: var(--headline);
+        font-size: clamp(2.4rem, 4vw, 3.2rem);
+        font-weight: 600;
+        line-height: 1.1;
+        letter-spacing: -0.01em;
+      }
+      .beyond-subtitle {
+        margin: 0;
+        font-size: 1.1rem;
+        line-height: 1.65;
+        opacity: 0.72;
+        max-width: 62ch;
+      }
+
+      /* ─── Gallery section ───────────────────────────────────── */
+      .beyond-gallery {
+        padding: clamp(2rem, 4vw, 3rem) clamp(1.25rem, 5vw, 4rem) clamp(3.5rem, 7vw, 6rem);
+      }
+      .beyond-gallery-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      /* ─── Card grid ─────────────────────────────────────────── */
+      .masonry-grid {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+      }
+
+      /* ─── Card ──────────────────────────────────────────────── */
+      .divers-card {
+        height: 380px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(26, 26, 22, 0.08);
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .divers-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      }
+      .divers-card:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      /* Image area */
+      .divers-card-media {
+        height: 300px;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+      .divers-card-img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        object-position: top center;
+      }
+
+      /* Card footer — title only */
+      .divers-card-footer {
+        display: flex;
+        align-items: center;
+        padding: 0 1rem;
+        background: var(--surface);
+        flex: 1;
+      }
+      .divers-card-title {
+        margin: 0;
+        font-family: var(--body);
+        font-size: 0.85rem;
+        font-weight: 600;
+        line-height: 1.3;
+        color: var(--text);
+      }
+
+      .toggle-icon-close { display: none; }
+      .divers-card-toggle[aria-expanded="true"] .toggle-icon-open { display: none; }
+      .divers-card-toggle[aria-expanded="true"] .toggle-icon-close { display: inline; }
+
+      /* ─── Modal overlay ─────────────────────────────────────── */
+      .beyond-modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.75);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      /* Override browser's display:none on [hidden] to allow fade animation */
+      .beyond-modal-overlay[hidden] {
+        display: flex;
+      }
+      .beyond-modal-overlay:not([hidden]) {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .beyond-modal-content {
+        background: var(--surface);
+        border-radius: 12px;
+        max-width: 680px;
+        width: 90%;
+        max-height: 85vh;
+        overflow-y: auto;
+        position: relative;
+        transform: scale(0.92);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .beyond-modal-overlay:not([hidden]) .beyond-modal-content {
+        transform: scale(1);
+      }
+      .beyond-modal-image {
+        width: 100%;
+        height: 260px;
+        object-fit: cover;
+        border-radius: 12px 12px 0 0;
+        display: block;
+      }
+      .beyond-modal-text {
+        padding: 2rem;
+      }
+      .beyond-modal-text h3 {
+        margin: 0 0 1rem;
+        font-family: var(--headline);
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+      .beyond-modal-text p {
+        margin: 0;
+        font-size: 0.95rem;
+        line-height: 1.72;
+        opacity: 0.85;
+      }
+      .beyond-modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: white;
+        border: 1.5px solid #1A1A16;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        transition: all 0.2s ease;
+      }
+      .beyond-modal-close:hover {
+        background: var(--accent);
+        color: white;
+        border-color: var(--accent);
+      }
+      .beyond-modal-prev,
+      .beyond-modal-next {
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        background: white;
+        border: none;
+        border-radius: 50%;
+        width: 44px;
+        height: 44px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .beyond-modal-prev { position: fixed; left: 2rem; top: 50%; transform: translateY(-50%); }
+      .beyond-modal-next { position: fixed; right: 2rem; top: 50%; transform: translateY(-50%); }
+      .beyond-modal-prev:hover,
+      .beyond-modal-next:hover { background: var(--surface); }
+
+      /* ─── Responsive ────────────────────────────────────────── */
+      @media (max-width: 75rem) {
+        .masonry-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 46rem) {
+        .masonry-grid {
+          grid-template-columns: 1fr;
+        }
+        .masonry-item { grid-column: span 1 !important; }
+        .beyond-modal-prev,
+        .beyond-modal-next { display: none; }
+      }
+
+      /* ─── Reduced motion ────────────────────────────────────── */
+      @media (prefers-reduced-motion: reduce) {
+        .divers-card,
+        .beyond-modal-overlay,
+        .beyond-modal-content { transition: none; }
+      }
+
+      /* ─── Card + button ────────────────────────────────────── */
+      .divers-card-plus {
+        margin-left: auto;
+        font-size: 1.25rem;
+        font-weight: 300;
+        color: var(--accent);
+        line-height: 1;
+        flex-shrink: 0;
+      }
+
+      /* ─── Case nav ──────────────────────────────────────────── */
+      .case-nav-section {
+        padding: clamp(2rem, 4vw, 3.5rem) clamp(1.25rem, 5vw, 4rem);
+      }
+      .case-nav {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1.75rem;
+        border-top: 1px solid rgba(26, 26, 22, 0.12);
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <header class="site-header" aria-label="Primary">
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="../index.html#work" class="site-nav__back" style="margin-right: auto; opacity: 0.75;">← All Work</a>
+        <a href="../index.html#home">Home</a>
+        <a href="../index.html#work">Work</a>
+        <a href="../index.html#about">About</a>
+        <a href="../assets/cv/2026-03-24-Lebenslauf-Estelle-Bolin-UX-UI.pdf" target="_blank" rel="noopener noreferrer" aria-label="CV, opens in new tab">CV<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" focusable="false" style="margin-left: 3px; vertical-align: middle;"><path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
+        <a href="../index.html#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="main-content">
+
+      <!-- ── HERO ──────────────────────────────────────────────── -->
+      <section class="beyond-hero" aria-labelledby="beyond-title">
+        <div class="beyond-hero-inner">
+          <a class="case-back-link" href="../index.html#work">← All Work</a>
+          <p class="case-eyebrow">thought leadership · ai · accessibility · &amp; more</p>
+          <h1 id="beyond-title">Beyond the Case Studies &amp; AI Projects</h1>
+          <p class="beyond-subtitle">
+            I've worked as a UX/UI and Product Designer across corporate, agency, and freelance settings, building a diverse portfolio across B2B software, healthcare technology, and high-end consumer brands. This is a selection of projects that are too small for a full case study, not finished or not officially published yet.
+          </p>
+        </div>
+      </section>
+
+      <!-- ── CARD GRID ─────────────────────────────────────────── -->
+      <section class="beyond-gallery" aria-label="Project cards">
+        <div class="beyond-gallery-inner">
+          <ul class="masonry-grid" role="list">
+
+            <!-- Card 1: XING AdManager -->
+            <li class="masonry-item" style="grid-column: span 2">
+              <article
+                class="divers-card"
+                role="button"
+                tabindex="0"
+                aria-labelledby="card-1-title"
+                data-index="0"
+                data-title="XING AdManager"
+                data-image="../assets/beyond-case/card%20xing%20open.png"
+                data-text="As Product Designer at XING, I was responsible for optimizing the AdManager platform. Working closely with data scientists and front-end and back-end developers, I led user research and analytics efforts to turn findings into actionable design decisions. Two examples: For keyword targeting, I validated that increased precision was unintentionally reducing advertiser confidence and campaign reach — and defined an MVP that balanced user trust, data quality, and technical constraints. For new user onboarding, I redesigned the self-registration flow to reduce friction at a critical entry point."
+              >
+                <div class="divers-card-media" aria-hidden="true">
+                  <img
+                    class="divers-card-img"
+                    src="../assets/beyond-case/card%20xing%20closed.png"
+                    alt="XING AdManager platform interface"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="divers-card-footer">
+                  <h3 class="divers-card-title" id="card-1-title">XING AdManager</h3>
+                </div>
+              </article>
+            </li>
+
+            <!-- Card 2: Porsche Model Pages -->
+            <li class="masonry-item">
+              <article
+                class="divers-card"
+                role="button"
+                tabindex="0"
+                aria-labelledby="card-2-title"
+                data-index="1"
+                data-title="Porsche Model Pages"
+                data-image="../assets/beyond-case/card%20porsche%20open.png"
+                data-text="As UX/UI Designer at Grabarz &amp; Partner, I contributed to multiple Porsche model pages, working with an established design library that I helped to evolve and improve. Collaborating closely with art directors and copywriters, I refined interfaces, advocated for accessibility standards, and researched emerging trends to elevate the Porsche digital experience on web."
+              >
+                <div class="divers-card-media" aria-hidden="true">
+                  <img
+                    class="divers-card-img"
+                    src="../assets/beyond-case/card%20porsche%20closed.png"
+                    alt="Porsche model pages on web"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="divers-card-footer">
+                  <h3 class="divers-card-title" id="card-2-title">Porsche Model Pages</h3>
+                </div>
+              </article>
+            </li>
+
+            <!-- Card 3: MedoSync Healthcare in Ireland -->
+            <li class="masonry-item">
+              <article
+                class="divers-card"
+                role="button"
+                tabindex="0"
+                aria-labelledby="card-3-title"
+                data-index="2"
+                data-title="MedoSync Healthcare in Ireland"
+                data-image="../assets/beyond-case/card%20medosync%20open.png"
+                data-text="As freelance UX Designer at this early-stage Irish healthcare startup, I helped design a B2B platform connecting hospitals, doctors, and patients to streamline clinical workflows and digitise billing processes. I introduced user-centered methods into a team with limited UX maturity — establishing research practices, running competitor analysis, and facilitating journey mapping. I designed complex healthcare workflows and accessible digital forms for web and mobile, including patient intake and insurance forms, considering WCAG standards and the needs of diverse user groups. The project also resulted in a newly developed component library to support consistent, scalable design going forward."
+              >
+                <div class="divers-card-media" aria-hidden="true">
+                  <img
+                    class="divers-card-img"
+                    src="../assets/beyond-case/card%20medosync%20closed.png"
+                    alt="MedoSync healthcare app interface"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="divers-card-footer">
+                  <h3 class="divers-card-title" id="card-3-title">MedoSync Healthcare in Ireland</h3>
+                </div>
+              </article>
+            </li>
+
+            <!-- Card 4: Hotel Website & Booking Redesign -->
+            <li class="masonry-item">
+              <article
+                class="divers-card"
+                role="button"
+                tabindex="0"
+                aria-labelledby="card-4-title"
+                data-index="3"
+                data-title="Boutique Hotel — Designing for Direct Bookings"
+                data-image="../assets/beyond-case/card%20hotel%20open.png"
+                data-text="As freelance UX Designer, I redesigned a boutique hotel website to decrease booking.com dependency and increase direct conversions. Partnering with a developer, I guided my client through their first digital project, establishing standard design processes and accessibility best practices. The project included competitor analysis to meet industry standards, photography direction for visual consistency, and an accessibility-first design approach compliant with WCAG 2.2 guidelines — all while maintaining the existing brand identity with a modernized appeal."
+              >
+                <div class="divers-card-media" aria-hidden="true">
+                  <img
+                    class="divers-card-img"
+                    src="../assets/beyond-case/card%20hotel%20closed.png"
+                    alt="Hotel website and booking redesign"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="divers-card-footer">
+                  <h3 class="divers-card-title" id="card-4-title">Boutique Hotel — Designing for Direct Bookings</h3>
+                </div>
+              </article>
+            </li>
+
+            <!-- Card 5: Speaker Engagement -->
+            <li class="masonry-item">
+              <article
+                class="divers-card"
+                role="button"
+                tabindex="0"
+                aria-labelledby="card-5-title"
+                data-index="4"
+                data-title="Talks, Workshops &amp; Mentoring"
+                data-image="../assets/beyond-case/card%20speaker%20engagement%20open.png"
+                data-text="I enjoy giving talks and workshops on topics I care deeply about — women's empowerment, accessibility, and inclusion. I've led workshops for Ladies that UX Hamburg and co-delivered an introductory accessibility webinar with Dialoghaus Hamburg and Google Germany. Increasingly, I'm drawn to mentoring and coaching — helping others navigate design, accessibility, and building confidence in their work."
+              >
+                <div class="divers-card-media" aria-hidden="true">
+                  <img
+                    class="divers-card-img"
+                    src="../assets/beyond-case/card%20speaker%20engagement%20closed.png"
+                    alt="Estelle speaking at a UX event"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="divers-card-footer">
+                  <h3 class="divers-card-title" id="card-5-title">Talks, Workshops &amp; Mentoring</h3>
+                </div>
+              </article>
+            </li>
+
+            <!-- Card 6: Dialogue Online for Inclusion -->
+            <li class="masonry-item" style="grid-column: span 2">
+              <article
+                class="divers-card"
+                role="button"
+                tabindex="0"
+                aria-labelledby="card-6-title"
+                data-index="5"
+                data-title="Project Lead — Dialogue Online for Inclusion"
+                data-image="../assets/beyond-case/card%20dialogue%20open.png"
+                data-text="Dialogue Online for Inclusion is an interactive online workshop series that helps D&amp;I managers, HR teams, and business leaders create more inclusive workplaces for people with disabilities. It was developed to address the gap between awareness training and real behavioral change, especially in companies that still struggle to hire and support disabled talent. As project manager, I guided the team through an iterative process with research, stakeholder interviews, personas, prototyping, and testing of five workshop formats, which resulted in a market-ready product launched in April 2022."
+              >
+                <div class="divers-card-media" aria-hidden="true">
+                  <img
+                    class="divers-card-img"
+                    src="../assets/beyond-case/card%20dialogue%20closed.png"
+                    alt="Dialogue Online for Inclusion workshop"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="divers-card-footer">
+                  <h3 class="divers-card-title" id="card-6-title">Project Lead — Dialogue Online for Inclusion</h3>
+                </div>
+              </article>
+            </li>
+
+            <!-- Card 7: AI Tools & Experiments -->
+            <li class="masonry-item" style="grid-column: span 4;">
+              <article class="divers-card"
+                data-title="AI Tools &amp; Experiments"
+                data-text="I recently completed an AI Manager certification and have been actively exploring how AI tools fit into a design practice — not as shortcuts, but as thinking partners. I built this portfolio with Claude Code, experiment with AI agents, and am currently documenting what I'm learning for a dedicated case study."
+                data-image=""
+                data-index="6">
+                <div class="divers-card-media" style="height:300px;overflow:hidden;">
+                  <img src="../assets/beyond-case/veli-batuhan-aytac-QooMxLHTmo0-unsplash.jpg" alt="AI tools and experiments" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+                </div>
+                <div class="divers-card-footer">
+                  <h3 class="divers-card-title">AI Tools &amp; Experiments</h3>
+                </div>
+              </article>
+            </li>
+
+          </ul>
+        </div>
+      </section>
+
+      <!-- ── MODAL ──────────────────────────────────────────────── -->
+      <div class="beyond-modal-overlay" id="beyond-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+        <button class="beyond-modal-prev" aria-label="Previous project">&#8249;</button>
+        <div class="beyond-modal-content">
+          <button class="beyond-modal-close" aria-label="Close">&times;</button>
+          <div class="beyond-modal-body">
+            <img class="beyond-modal-image" src="" alt="" id="modal-image">
+            <div class="beyond-modal-text">
+              <h3 id="modal-title"></h3>
+              <p></p>
+            </div>
+          </div>
+        </div>
+        <button class="beyond-modal-next" aria-label="Next project">&#8250;</button>
+      </div>
+
+      <!-- ── FOOTER NAV ─────────────────────────────────────────── -->
+      <section class="case-nav-section" aria-label="Page navigation">
+        <div class="case-nav">
+          <a class="contact-link" href="../index.html#work">← All Work</a>
+          <a class="contact-link" href="case-xing.html" aria-label="Next case: Redesigning the XING Job Ad Purchase Experience">Next Case: Redesigning the XING Job Ad Purchase Experience →</a>
+        </div>
+        <footer class="site-footer" aria-label="Site footer">
+          © 2026 Estelle Bolin · Built with Claude · <a href="/impressum.html">Impressum</a>
+        </footer>
+      </section>
+
+    </main>
+
+    <script>
+      (function () {
+        var cards = Array.from(document.querySelectorAll('.divers-card'));
+        var modal = document.getElementById('beyond-modal');
+        var modalTitle = document.getElementById('modal-title');
+        var modalImg = document.getElementById('modal-image');
+        var modalP = modal.querySelector('.beyond-modal-text p');
+        var closeBtn = modal.querySelector('.beyond-modal-close');
+        var prevBtn = modal.querySelector('.beyond-modal-prev');
+        var nextBtn = modal.querySelector('.beyond-modal-next');
+        var currentIndex = 0;
+        var previouslyFocused = null;
+
+        function getFocusable() {
+          return Array.from(modal.querySelectorAll('button, [href], [tabindex]:not([tabindex="-1"])'));
+        }
+
+        function populateModal(index) {
+          var card = cards[index];
+          var cardImg = card.querySelector('.divers-card-img');
+          if (card.dataset.image) {
+            modalImg.src = card.dataset.image;
+            modalImg.alt = cardImg ? cardImg.alt : '';
+            modalImg.style.display = 'block';
+          } else {
+            modalImg.src = '';
+            modalImg.alt = '';
+            modalImg.style.display = 'none';
+          }
+          modalTitle.textContent = card.dataset.title;
+          modalP.textContent = card.dataset.text;
+          currentIndex = index;
+        }
+
+        function openModal(index) {
+          populateModal(index);
+          previouslyFocused = document.activeElement;
+          modal.removeAttribute('hidden');
+          document.body.style.overflow = 'hidden';
+          closeBtn.focus();
+        }
+
+        function closeModal() {
+          modal.setAttribute('hidden', '');
+          document.body.style.overflow = '';
+          if (previouslyFocused) previouslyFocused.focus();
+        }
+
+        function navigate(dir) {
+          populateModal((currentIndex + dir + cards.length) % cards.length);
+        }
+
+        cards.forEach(function (card) {
+          card.addEventListener('click', function () {
+            openModal(parseInt(this.dataset.index, 10));
+          });
+          card.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              openModal(parseInt(this.dataset.index, 10));
+            }
+          });
+        });
+
+        closeBtn.addEventListener('click', closeModal);
+
+        modal.addEventListener('click', function (e) {
+          if (e.target === modal) closeModal();
+        });
+
+        prevBtn.addEventListener('click', function () { navigate(-1); });
+        nextBtn.addEventListener('click', function () { navigate(1); });
+
+        document.addEventListener('keydown', function (e) {
+          if (modal.hasAttribute('hidden')) return;
+          if (e.key === 'Escape') { closeModal(); return; }
+          if (e.key === 'ArrowLeft') { navigate(-1); return; }
+          if (e.key === 'ArrowRight') { navigate(1); return; }
+          if (e.key === 'Tab') {
+            var focusable = getFocusable();
+            var first = focusable[0];
+            var last = focusable[focusable.length - 1];
+            if (e.shiftKey) {
+              if (document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+              }
+            } else {
+              if (document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+              }
+            }
+          }
+        });
+      })();
+    </script>
+    <script src="../script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <meta
+      name="description"
+      content="Case study: Bringing UX Clarity to an Agency Website — strategic redesign of Grabarz &amp; Partner's agency website with accessibility, UX research, and internal alignment."
+    />
+    <title>Agency Website Redesign · Case Study | Estelle</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      /* ─── Layout token ──────────────────────────────────────── */
+      .cs-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      /* ─── Back link ─────────────────────────────────────────── */
+      .case-back-link {
+        display: inline-block;
+        margin-bottom: 2rem;
+        font-size: 0.88rem;
+        color: var(--accent);
+        font-weight: 500;
+        letter-spacing: 0.01em;
+        text-decoration: none;
+      }
+      .case-back-link:hover { opacity: 0.75; }
+
+      /* ─── Case hero ─────────────────────────────────────────── */
+      .case-hero {
+        padding: clamp(3rem, 7vw, 6.5rem) clamp(1.25rem, 5vw, 4rem)
+          clamp(2rem, 4vw, 3.5rem);
+      }
+      .case-hero-grid {
+        display: grid;
+        grid-template-columns: 1.35fr 1fr;
+        gap: clamp(2rem, 4vw, 3.5rem);
+        align-items: start;
+      }
+      .case-eyebrow {
+        margin: 0 0 1rem;
+        font-size: 0.88rem;
+        color: var(--accent);
+        text-transform: lowercase;
+        letter-spacing: 0.01em;
+      }
+      .case-hero h1 {
+        margin: 0 0 1.5rem;
+        font-family: var(--headline);
+        font-size: clamp(2.4rem, 4vw, 3.2rem);
+        font-weight: 600;
+        line-height: 1.15;
+        letter-spacing: -0.01em;
+        max-width: 28ch;
+      }
+
+      /* ─── Meta card ─────────────────────────────────────────── */
+      .case-meta-card {
+        background: var(--surface);
+        border-radius: 12px;
+        padding: 1.5rem 1.65rem;
+        transform: rotate(2deg);
+        max-width: 300px;
+        justify-self: end;
+        align-self: start;
+      }
+      .case-meta-card dl {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+      }
+      .meta-row {
+        display: flex;
+        flex-direction: row;
+        align-items: baseline;
+        gap: 1.25rem;
+      }
+      .case-meta-card dt {
+        font-size: 13px;
+        color: var(--accent);
+        font-weight: 700;
+        margin: 0;
+        white-space: nowrap;
+        width: 68px;
+        flex-shrink: 0;
+      }
+      .case-meta-card dd {
+        font-size: 13px;
+        font-weight: 400;
+        margin: 0;
+        line-height: 1.45;
+      }
+
+      /* ─── Content sections ──────────────────────────────────── */
+      .cs-section {
+        padding: clamp(3.5rem, 7vw, 7rem) clamp(1.25rem, 5vw, 4rem);
+      }
+      .cs-section--alt {
+        background: var(--surface);
+      }
+      .cs-section h2 {
+        margin: 0 0 1.35rem;
+        font-family: var(--headline);
+        font-size: clamp(1.8rem, 3vw, 2.8rem);
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        line-height: 1.1;
+        text-align: center;
+      }
+      .cs-lead {
+        margin: 0 0 1.75rem;
+        font-size: 1.06rem;
+        line-height: 1.72;
+        max-width: 720px;
+        margin-left: auto;
+        margin-right: auto;
+        opacity: 0.95;
+      }
+      .cs-lead:last-child { margin-bottom: 0; }
+
+      /* ─── Image placeholder ─────────────────────────────────── */
+      .cs-placeholder {
+        background: var(--surface);
+        height: 320px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 2rem;
+      }
+      .cs-placeholder p {
+        color: rgba(26, 26, 22, 0.45);
+        font-size: 0.88rem;
+        margin: 0;
+      }
+
+      /* ─── Card grids ────────────────────────────────────────── */
+      .cs-three-col {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.15rem;
+        margin-top: 2rem;
+      }
+      .cs-five-col {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.15rem;
+        margin-top: 2rem;
+      }
+      .cs-info-card {
+        background: var(--surface);
+        border: 1px solid rgba(26, 26, 22, 0.07);
+      }
+      .cs-section--alt .cs-info-card {
+        background: var(--bg);
+      }
+      .cs-info-card-label {
+        display: block;
+        margin: 0;
+        padding: 0;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      /* ─── Unified card layout ───────────────────────────────── */
+      .skill-card,
+      .cs-info-card {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 1.4rem 1.5rem;
+        border-radius: 12px;
+      }
+      .skill-card .card-header,
+      .cs-info-card .card-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+      }
+      .skill-card .card-header svg,
+      .cs-info-card .card-header svg {
+        flex-shrink: 0;
+        display: block;
+      }
+      .skill-card p,
+      .cs-info-card p {
+        margin: 0;
+        padding: 0;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: var(--text);
+        text-align: left;
+      }
+
+      /* ─── Insight rows ──────────────────────────────────────── */
+      .cs-insights {
+        max-width: 700px;
+        margin: 2rem auto 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+      .cs-insight {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.1rem;
+      }
+      .cs-insight-icon {
+        flex-shrink: 0;
+        width: 36px;
+        height: 36px;
+        background: #E8EBE4;
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+        font-size: 1rem;
+        color: var(--accent);
+        font-weight: 600;
+      }
+      .cs-insight p {
+        margin: 0;
+        font-size: 0.98rem;
+        line-height: 1.65;
+        opacity: 0.95;
+        text-align: left;
+      }
+
+      /* ─── Skills grid ───────────────────────────────────────── */
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.15rem;
+        margin-top: 1.75rem;
+      }
+      .skill-card {
+        background: var(--surface);
+      }
+      .skill-card h3 {
+        margin: 0;
+        padding: 0;
+        font-family: var(--body);
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent);
+        line-height: 1.2;
+      }
+
+      /* ─── Scale frame (tilted image) ───────────────────────── */
+      .cs-scale-frame {
+        background: #E8EBE4;
+        border-radius: 12px;
+        padding: 0;
+        max-width: 900px;
+        margin: 2.5rem auto 0;
+        overflow: hidden;
+      }
+      .cs-img--tilted {
+        width: 100%;
+        display: block;
+        transform: rotate(-2deg);
+        transform-origin: center center;
+        border-radius: 8px;
+        margin: 0;
+        padding: 0;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .cs-img--tilted { transform: none; }
+      }
+
+      /* ─── Project lessons list ──────────────────────────────── */
+      .cs-lessons-intro {
+        max-width: 700px;
+        margin: 0 auto 2.5rem;
+        text-align: left;
+        font-size: 1.06rem;
+        line-height: 1.72;
+        opacity: 0.95;
+      }
+      .cs-lessons-list {
+        max-width: 700px;
+        margin: 0 auto;
+        list-style: none;
+        padding: 0;
+      }
+      .cs-lessons-list li {
+        font-size: 1rem;
+        line-height: 1.65;
+        opacity: 0.95;
+        padding-left: 1.5rem;
+        text-indent: -1.5rem;
+        margin-bottom: 0.75rem;
+        text-align: left;
+      }
+      .cs-lessons-list li::before {
+        content: "— ";
+        color: var(--accent);
+      }
+
+      /* ─── Case nav ──────────────────────────────────────────── */
+      .case-nav-section {
+        padding: clamp(2rem, 4vw, 3.5rem) clamp(1.25rem, 5vw, 4rem);
+      }
+      .case-nav {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1.75rem;
+        border-top: 1px solid rgba(26, 26, 22, 0.12);
+      }
+
+      /* ─── Responsive ────────────────────────────────────────── */
+      @media (max-width: 52rem) {
+        .case-hero-grid { grid-template-columns: 1fr; }
+        .case-meta-card {
+          transform: none;
+          max-width: 100%;
+          justify-self: start;
+          width: 100%;
+        }
+        .cs-three-col { grid-template-columns: 1fr; }
+        .cs-five-col { grid-template-columns: 1fr; }
+        .skills-grid { grid-template-columns: 1fr; }
+      }
+      .cs-figcaption {
+        font-size: 0.875rem;
+        color: #5a5a52;
+        margin-top: 8px;
+        text-align: left;
+      }
+      .ia-images-grid {
+        display: grid;
+        grid-template-columns: 42fr 55fr;
+        gap: 24px;
+        margin-top: 2rem;
+      }
+      .ia-figure {
+        margin: 0;
+        border: none;
+        outline: none;
+        box-shadow: none;
+      }
+      .ia-img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        box-shadow: none;
+      }
+
+      /* ─── Research & Discovery alternating blocks ───────────── */
+      .cs-rd-intro {
+        margin: 0 0 3rem;
+        font-size: 1.06rem;
+        line-height: 1.72;
+        opacity: 0.95;
+        text-align: left;
+      }
+      .cs-rd-block {
+        display: flex;
+        align-items: center;
+        gap: 48px;
+        margin-bottom: 4rem;
+      }
+      .cs-rd-block--reverse {
+        flex-direction: row-reverse;
+      }
+      .cs-rd-image {
+        width: 45%;
+        height: 320px;
+        overflow: hidden;
+        border-radius: 8px;
+        flex-shrink: 0;
+      }
+      .cs-rd-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .cs-rd-text {
+        flex: 1;
+      }
+      .cs-rd-text h3 {
+        font-family: var(--body);
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin: 0 0 8px;
+      }
+      .cs-rd-text p {
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.7;
+        text-align: left;
+        hyphens: none;
+        -webkit-hyphens: none;
+      }
+      .cs-section .cs-text-label {
+        text-align: left;
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+      }
+      @media (max-width: 52rem) {
+        .cs-rd-block,
+        .cs-rd-block--reverse {
+          flex-direction: column;
+        }
+        .cs-rd-image {
+          width: 100%;
+        }
+      }
+    </style>
+    <style>
+      .approach-list {
+        list-style: none;
+        padding: 0;
+        margin: 1.5rem auto 0;
+        max-width: 720px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .approach-list li {
+        padding-left: 1.25rem;
+        position: relative;
+        font-size: 1rem;
+        line-height: 1.65;
+        opacity: 0.95;
+      }
+      .approach-list li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.55em;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <header class="site-header" aria-label="Primary">
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="../index.html#work" class="site-nav__back" style="margin-right: auto; opacity: 0.75;">← All Work</a>
+        <a href="../index.html#home">Home</a>
+        <a href="../index.html#work">Work</a>
+        <a href="../index.html#about">About</a>
+        <a href="../assets/cv/CV Estelle Bolin UX UI Product 2026 Portfolio.pdf" target="_blank" rel="noopener noreferrer" aria-label="CV, opens in new tab">CV<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" focusable="false" style="margin-left: 3px; vertical-align: middle;"><path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
+        <a href="../index.html#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="main-content">
+
+      <!-- ── 1. HERO ──────────────────────────────────────────── -->
+      <section class="case-hero" aria-labelledby="case-title">
+        <div class="cs-inner">
+          <a class="case-back-link" href="../index.html#work">← All Work</a>
+
+          <div class="case-hero-grid">
+            <div class="case-hero-copy">
+              <p class="case-eyebrow">strategy · ux research · accessibility · workshop facilitation</p>
+              <h1 id="case-title">Bringing UX Clarity to an Agency Website</h1>
+              <p style="font-size: 1rem; line-height: 1.6; opacity: 0.85; margin: 0; max-width: 52ch;">I led the strategic redesign of the agency website to create a clearer, more credible user experience while embedding UX principles and accessibility standards into the process.</p>
+            </div>
+
+            <aside class="case-meta-card" aria-label="Case details">
+              <dl>
+                <div class="meta-row">
+                  <dt>Company</dt>
+                  <dd>Grabarz &amp; Partner</dd>
+                </div>
+                <div class="meta-row">
+                  <dt>Sector</dt>
+                  <dd>Creative Agency · B2B Services</dd>
+                </div>
+                <div class="meta-row">
+                  <dt>Year</dt>
+                  <dd>2025</dd>
+                </div>
+                <div class="meta-row">
+                  <dt>My role</dt>
+                  <dd>UX Designer · Strategic UX Lead</dd>
+                </div>
+              </dl>
+            </aside>
+          </div>
+
+          <figure class="cs-figure" style="margin-top: 2.5rem; text-align: center;">
+            <img
+              src="../assets/grabarz/01-section-key-visual.png"
+              alt="Agency website redesign — key visual overview of the Grabarz &amp; Partner project"
+              loading="lazy"
+              style="width: 100%; display: block; border-radius: 8px;"
+            />
+            <figcaption class="cs-figcaption">Thumbnails of Grabarz &amp; Partner's creative campaigns across different clients.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ── 2. WHAT WAS BROKEN ────────────────────────────────── -->
+      <section class="cs-section" aria-labelledby="broken-heading">
+        <div class="cs-inner">
+          <h2 id="broken-heading">What Was Broken in the Experience?</h2>
+          <p class="cs-lead" style="margin-left: auto; margin-right: auto;">Our agency website had become a barrier to growth. Poor accessibility, slow performance, unclear service communication, fragmented journeys, and a difficult CMS made it hard to keep the site useful and up to date. At the same time, a new corporate identity was about to be launched. The redesign aimed to turn the website into a clearer, more reliable touchpoint for potential clients, job candidates, and industry partners — while laying UX foundations for the organization.</p>
+        </div>
+      </section>
+
+      <!-- ── 3. THE CHALLENGE ──────────────────────────────────── -->
+      <section class="cs-section cs-section--alt" aria-labelledby="challenge-heading">
+        <div class="cs-inner">
+          <h2 id="challenge-heading">The Challenge</h2>
+          <p class="cs-lead" style="margin-left: auto; margin-right: auto;">The project had to solve for multiple constraints at once: limited budget, competing internal priorities, and a concurrent brand refresh that could affect every design decision. On top of that, the agency lacked a consistent UX practice — there was no shared research culture, accessibility standards were uneven, and user-centered decisions were not yet built into the process. What made this project especially important was its internal impact: it was our chance as UX team to prove that UX Design could bring clarity, structure, and measurable value, even with limited resources and under no ideal conditions.</p>
+        </div>
+      </section>
+
+      <!-- ── 4. MY APPROACH ────────────────────────────────────── -->
+      <section class="cs-section" aria-labelledby="approach-heading">
+        <div class="cs-inner">
+          <h2 id="approach-heading">My Approach</h2>
+          <p class="cs-lead">I positioned the project as more than a website redesign — it became an opportunity to raise UX maturity across the organization. The focus was on research, alignment, and creating a decision-making structure that could outlast the launch itself.</p>
+
+          <ul class="approach-list" aria-label="Approach steps">
+            <li>Accessibility audit to identify barriers and prioritize fixes.</li>
+            <li>Competitive analysis to benchmark structure, clarity, and expectations.</li>
+            <li>Stakeholder workshops to align priorities and reduce ambiguity.</li>
+            <li>Journey mapping for key audience groups.</li>
+            <li>A UX framework to guide future decisions.</li>
+          </ul>
+
+          <figure class="cs-figure" style="margin-top: 2rem; max-width: 720px; margin-left: auto; margin-right: auto;">
+            <img
+              src="../assets/grabarz/workshop stickies.png"
+              alt="Workshop sticky notes — collaborative alignment session with stakeholders during the agency website redesign process"
+              style="width: 100%; height: 400px; object-fit: cover; object-position: center; border-radius: 8px; display: block; border: none; outline: none; box-shadow: none;"
+              loading="lazy"
+            />
+            <figcaption class="cs-figcaption">Sticky notes from stakeholder workshop mapping user needs by department.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ── 5. WHAT SHAPED THE DIRECTION ─────────────────────── -->
+      <section class="cs-section cs-section--alt" aria-labelledby="shaped-heading">
+        <div class="cs-inner">
+          <h2 id="shaped-heading">What Shaped the Direction</h2>
+
+          <div class="cs-text-block">
+            <div class="cs-text-item">
+              <p class="cs-text-label">What research revealed</p>
+              <p>The research made one thing clear: the website was not failing because of a single issue, but because multiple weaknesses reinforced each other. Users faced unclear service communication, fragmented journeys, and accessibility barriers, while the internal team struggled with a CMS that made updates slow and inconsistent.</p>
+            </div>
+            <div class="cs-text-item">
+              <p class="cs-text-label">Accessibility as priority</p>
+              <p>Accessibility quickly proved to be more than a compliance task. It became a practical lens for improving clarity, usability, and quality across the site — especially at a moment when the agency was about to introduce a new visual identity.</p>
+            </div>
+            <div class="cs-text-item">
+              <p class="cs-text-label">Alignment on shared vision</p>
+              <p>With multiple departments involved, alignment was just as important as design execution. I used workshops and structured feedback to create a shared direction, helping the team move from subjective opinions toward clearer, more user-centered decisions.</p>
+            </div>
+          </div>
+
+          <div class="case-media-grid">
+            <figure class="cs-figure" style="margin:0;">
+              <div style="height:560px;overflow:hidden;border-radius:12px;">
+                <img
+                  src="../assets/grabarz/common vision.png"
+                  alt="Workshop output showing the shared UX principles developed with the Grabarz & Partner team"
+                  style="width:100%;height:100%;object-fit:contain;display:block;mix-blend-mode:multiply;"
+                  loading="lazy"
+                />
+              </div>
+              <figcaption class="cs-figcaption">Workshop-defined values, survey results, and a status quo analysis of current website issues — building a shared vision for the project.</figcaption>
+            </figure>
+            <figure class="cs-figure" style="margin:0;">
+              <div style="height:560px;overflow:hidden;border-radius:12px;">
+                <img
+                  src="../assets/grabarz/accessibility relaunch.png"
+                  alt="Accessibility audit results and relaunch rationale presented to stakeholders"
+                  style="width:100%;height:100%;object-fit:contain;display:block;"
+                  loading="lazy"
+                />
+              </div>
+              <figcaption class="cs-figcaption">Results of a quick WCAG 2.2 audit of the current website.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── 6. RESEARCH & DISCOVERY ──────────────────────────── -->
+      <section class="cs-section" aria-labelledby="research-heading">
+        <div class="cs-inner">
+          <h2 id="research-heading">Research &amp; Discovery</h2>
+
+          <p class="cs-rd-intro">With limited resources and competing priorities, I focused on four research methods that gave us the clearest signal — fast.</p>
+
+          <!-- Block 1: text left, image right -->
+          <div class="cs-rd-block">
+            <div class="cs-rd-text">
+              <h3>Accessibility Foundation</h3>
+              <p>The site audit revealed critical barriers that couldn't be treated as edge cases. I made the case internally that accessibility wasn't just a legal requirement ahead of the European Accessibility Act — it's a genuine differentiator that improves experience for everyone.</p>
+            </div>
+            <div class="cs-rd-image" style="height:auto;">
+              <img src="../assets/grabarz/06-section-a.png" alt="Accessibility audit findings for the Grabarz & Partner website" loading="lazy" style="width:100%;height:auto;object-fit:contain;display:block;background:transparent;" />
+            </div>
+          </div>
+
+          <!-- Block 2: image left, text right -->
+          <div class="cs-rd-block cs-rd-block--reverse">
+            <div class="cs-rd-text">
+              <h3>Stakeholder Alignment</h3>
+              <p>I ran a cross-departmental workshop to surface real tensions early: Sales wanted lead generation, Communications needed event visibility, HR needed a functional jobs section. Among other methods, we used Start-Stop-Continue-More-Less to structure feedback — combined with a short department-specific survey to understand what each team's users actually needed before any design decisions were made.</p>
+            </div>
+            <div class="cs-rd-image">
+              <img src="../assets/grabarz/06-section-b.png" alt="Stakeholder alignment workshop output" loading="lazy" style="width:100%;height:100%;object-fit:contain;display:block;" />
+            </div>
+          </div>
+
+          <!-- Block 3: text left, image right -->
+          <div class="cs-rd-block">
+            <div class="cs-rd-text">
+              <h3>Persona &amp; Journey Mapping</h3>
+              <p>We identified 6 distinct user categories and mapped their journeys to find where needs overlapped — and where the site was losing them. One insight stood out: new clients and applicants often want the same thing — evidence of innovative thinking.</p>
+            </div>
+            <div class="cs-rd-image" style="height:auto;">
+              <img src="../assets/grabarz/06-section-c.png" alt="Persona and user journey mapping overview" loading="lazy" style="width:100%;height:auto;object-fit:contain;display:block;" />
+            </div>
+          </div>
+
+          <!-- Block 4: image left, text right -->
+          <div class="cs-rd-block cs-rd-block--reverse">
+            <div class="cs-rd-text">
+              <h3>Competitive Intelligence</h3>
+              <p>Most agency sites followed predictable patterns. Non-agency sites showed more interesting approaches to storytelling and engagement. With limited research time, competitor analysis became the fastest way to see what was possible — and what to avoid.</p>
+            </div>
+            <div class="cs-rd-image">
+              <img src="../assets/grabarz/06-section-d.png" alt="Competitive intelligence analysis of agency and non-agency websites" loading="lazy" style="width:100%;height:100%;object-fit:contain;display:block;" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── 7. NEW INFORMATION ARCHITECTURE ──────────────────── -->
+      <section class="cs-section" aria-labelledby="ia-heading">
+        <div class="cs-inner">
+          <h2 id="ia-heading">Next Steps &amp; Handover</h2>
+          <p class="cs-lead" style="margin-left: auto; margin-right: auto;">Finally, I created a new information architecture and a checklist for the website. The next phase was handed over to the creative department for the brand identity, while our UX team prepared the new design system in Figma.</p>
+          <div style="max-width: 720px; margin: 2rem auto 0; display: flex; flex-direction: column; gap: 2.5rem;">
+            <figure class="ia-figure">
+              <img src="../assets/grabarz/08-section-a.png" alt="New information architecture — proposed site map for the Grabarz &amp; Partner website redesign" class="ia-img" loading="lazy">
+              <figcaption class="cs-figcaption">Structured checklist of action points mapped by department and priority.</figcaption>
+            </figure>
+            <figure class="ia-figure">
+              <img src="../assets/grabarz/08-section-b.png" alt="UX checklist — evaluation criteria for each section of the redesigned website" class="ia-img" loading="lazy">
+              <figcaption class="cs-figcaption">New information architecture for the redesigned website.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── 9. PROJECT LESSONS ─────────────────────────────────── -->
+      <section class="cs-section cs-section--alt" aria-labelledby="lessons-heading">
+        <div class="cs-inner">
+          <h2 id="lessons-heading">What the Project Left Behind</h2>
+          <p class="cs-lessons-intro">After the workshop and survey, I consolidated all research, discussions, and departmental input into a single handover document — a structured checklist mapping what needed to be built, why, and who owned each action point.</p>
+          <p style="margin: 0 auto 1.5rem; font-style: italic; color: var(--text);">Budget constraints paused full implementation — but the groundwork was laid.</p>
+          <ul class="cs-lessons-list">
+            <li>A <strong>new information architecture</strong> covering revised site structure, new features (event pages, case study filters, improved contact options, Employer Branding for careers), and clear content priorities per audience.</li>
+            <li>Department-specific <strong>action points</strong> for Sales, Communications, Creative, and People &amp; Culture — making the next steps concrete and accountable.</li>
+            <li>A Figma <strong>design system</strong> built in collaboration with the developer, ready for the brand identity handover.</li>
+            <li>Internal <strong>UX foundations</strong> that extended beyond this project into how the agency approaches client work.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ── 10. SKILLS DEMONSTRATED ───────────────────────────── -->
+      <section class="cs-section" aria-labelledby="skills-heading">
+        <div class="cs-inner">
+          <h2 id="skills-heading">Skills Demonstrated</h2>
+
+          <div class="skills-grid" aria-label="Skills demonstrated in this project">
+            <article class="skill-card">
+              <div class="card-header">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4A7C59" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+                </svg>
+                <h3>Strategy</h3>
+              </div>
+              <p>Framing a website redesign as an opportunity to raise UX maturity, build internal alignment, and create lasting foundations — not just deliver a new interface.</p>
+            </article>
+            <article class="skill-card">
+              <div class="card-header">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4A7C59" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <h3>UX Research</h3>
+              </div>
+              <p>Combining journey mapping, competitor analysis, stakeholder workshops, and accessibility audits to build a shared evidence base under real project constraints.</p>
+            </article>
+            <article class="skill-card">
+              <div class="card-header">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4A7C59" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                <h3>Accessibility</h3>
+              </div>
+              <p>Conducting the agency's first-ever accessibility audit and using it as a lever to improve quality, credibility, and inclusion across the entire digital experience.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── CASE NAV + FOOTER ──────────────────────────────────── -->
+      <section class="case-nav-section" aria-label="Case study navigation">
+        <div class="case-nav">
+          <a class="contact-link" href="../index.html#work">← All Work</a>
+          <a class="contact-link" href="case-beyond.html" aria-label="Next case: Beyond the Case Studies &amp; AI Projects">Next Case: Beyond the Case Studies &amp; AI Projects →</a>
+        </div>
+        <footer class="site-footer" aria-label="Site footer">
+          © 2026 Estelle Bolin · Built with Claude · <a href="/impressum.html">Impressum</a>
+        </footer>
+      </section>
+
+    </main>
+
+    <script src="../script.js"></script>
+  </body>
+</html>

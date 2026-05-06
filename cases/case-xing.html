@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <meta
+      name="description"
+      content="Case study: Streamlining the XING Job Ad Purchase Experience — how data, IA strategy and UX design simplified a B2B e-commerce flow."
+    />
+    <title>XING Job Ad · Case Study | Estelle</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      /* ─── Layout tokens ─────────────────────────────────────── */
+      .cs-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      /* ─── Back link ─────────────────────────────────────────── */
+      .case-back-link {
+        display: inline-block;
+        margin-bottom: 2rem;
+        font-size: 0.88rem;
+        color: var(--accent);
+        font-weight: 500;
+        letter-spacing: 0.01em;
+        text-decoration: none;
+      }
+
+      .case-back-link:hover {
+        opacity: 0.75;
+      }
+
+      /* ─── Case hero ─────────────────────────────────────────── */
+      .case-hero {
+        padding: clamp(3rem, 7vw, 6.5rem) clamp(1.25rem, 5vw, 4rem)
+          clamp(2rem, 4vw, 3.5rem);
+      }
+
+      .case-hero-grid {
+        display: grid;
+        grid-template-columns: 1.35fr 1fr;
+        gap: clamp(2rem, 4vw, 3.5rem);
+        align-items: center;
+        margin-bottom: clamp(2.5rem, 5vw, 4rem);
+      }
+
+      .case-eyebrow {
+        margin: 0 0 1rem;
+        font-size: 0.88rem;
+        color: var(--accent);
+        text-transform: lowercase;
+        letter-spacing: 0.01em;
+      }
+
+      .case-hero h1 {
+        margin: 0 0 1rem;
+        font-family: var(--headline);
+        font-size: clamp(2.4rem, 4vw, 3.2rem);
+        font-weight: 600;
+        line-height: 1.15;
+        letter-spacing: -0.01em;
+        max-width: 28ch;
+      }
+
+      .case-hero-desc {
+        margin: 0;
+        font-size: 1.05rem;
+        line-height: 1.65;
+        max-width: 520px;
+        opacity: 0.9;
+      }
+
+      /* ─── Meta card ─────────────────────────────────────────── */
+      .case-meta-card {
+        background: var(--surface);
+        border-radius: 12px;
+        padding: 1.5rem 1.65rem;
+        transform: rotate(2deg);
+        max-width: 300px;
+        justify-self: end;
+        align-self: start;
+      }
+
+      .case-meta-card dl {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+      }
+
+      .xing-meta-row {
+        display: flex;
+        flex-direction: row;
+        align-items: baseline;
+        gap: 1.25rem;
+      }
+
+      .case-meta-card dt {
+        font-size: 13px;
+        color: #4a7c59;
+        font-weight: 700;
+        margin: 0;
+        white-space: nowrap;
+        width: 68px;
+        flex-shrink: 0;
+      }
+
+      .case-meta-card dd {
+        font-size: 13px;
+        font-weight: 400;
+        margin: 0;
+        line-height: 1.45;
+      }
+
+      /* ─── Before / After slider ─────────────────────────────── */
+      .ba-figure {
+        margin: 0;
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .ba-slider {
+        position: relative;
+        width: 100%;
+        margin: 0;
+        aspect-ratio: 1924 / 1272;
+        border-radius: 12px;
+        overflow: hidden;
+        background: transparent;
+        touch-action: none;
+        cursor: col-resize;
+        border: none;
+        outline: none;
+        box-shadow: none;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+      }
+
+      .ba-after,
+      .ba-before {
+        position: absolute;
+        inset: -1px;
+      }
+
+      .ba-after img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top left;
+        display: block;
+        pointer-events: none;
+      }
+
+      .ba-before {
+        overflow: hidden;
+        width: 50%; /* controlled by JS */
+      }
+
+      .ba-before img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top left;
+        display: block;
+        pointer-events: none;
+      }
+
+      .ba-divider {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%; /* controlled by JS */
+        width: 2px;
+        background: #4A7C59;
+        transform: translateX(-50%);
+        pointer-events: none;
+        z-index: 2;
+      }
+
+      .ba-handle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #fff;
+        border: 2px solid #4A7C59;
+        display: grid;
+        place-items: center;
+        box-shadow: none;
+      }
+
+      .ba-handle svg {
+        display: block;
+        flex-shrink: 0;
+      }
+
+      /* The native range input is the interactive control — invisible but fully operable */
+      .ba-range {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: col-resize;
+        margin: 0;
+        z-index: 3;
+        /* Override browser thumb size so the whole slider area is draggable */
+        -webkit-appearance: none;
+        appearance: none;
+      }
+
+      /* Visible focus ring on slider when range has keyboard focus */
+      .ba-slider:focus-within {
+        box-shadow: 0 0 0 2px #4A7C59;
+      }
+
+      .ba-label {
+        position: absolute;
+        bottom: 12px;
+        padding: 3px 9px;
+        background: rgba(26, 26, 22, 0.7);
+        color: #f8f8f4;
+        font-size: 0.8rem;
+        font-weight: 500;
+        border-radius: 6px;
+        pointer-events: none;
+        z-index: 2;
+        letter-spacing: 0.03em;
+      }
+
+      .ba-label--before {
+        left: 12px;
+      }
+
+      .ba-label--after {
+        right: 12px;
+      }
+
+      .ba-caption {
+        font-size: 0.875rem;
+        color: #5a5a52;
+        text-align: left;
+        margin-top: 12px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .ba-slider {
+          cursor: default;
+        }
+
+        .ba-range {
+          cursor: default;
+        }
+      }
+
+      /* ─── Content sections ──────────────────────────────────── */
+      .cs-section {
+        padding: clamp(3.5rem, 7vw, 7.5rem) clamp(1.25rem, 5vw, 4rem);
+      }
+
+      .cs-section--alt {
+        background: var(--surface);
+      }
+
+      .cs-section h2 {
+        margin: 0 0 1.35rem;
+        font-family: var(--headline);
+        font-size: clamp(1.8rem, 3vw, 2.8rem);
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        line-height: 1.1;
+      }
+
+      .cs-section--centered h2 {
+        text-align: center;
+      }
+
+      .cs-section--centered .cs-lead {
+        max-width: 100%;
+      }
+
+
+      .cs-lead {
+        margin: 0 0 1.75rem;
+        font-size: 1.06rem;
+        line-height: 1.72;
+        max-width: 720px;
+        margin-left: auto;
+        margin-right: auto;
+        opacity: 0.95;
+      }
+
+      .cs-lead:last-child {
+        margin-bottom: 0;
+      }
+
+      /* ─── Step stepper ──────────────────────────────────────── */
+      .step-stepper {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 3rem;
+        display: flex;
+        align-items: flex-start;
+      }
+
+      .step-stepper__item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+      }
+
+      /* Connecting line between steps */
+      .step-stepper__item:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        top: 16px;
+        left: 50%;
+        right: -50%;
+        height: 1px;
+        background: rgba(26, 26, 22, 0.2);
+        z-index: 0;
+      }
+
+      .step-stepper__bubble {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--accent);
+        color: #f8f8f4;
+        font-size: 0.82rem;
+        font-weight: 600;
+        display: grid;
+        place-items: center;
+        position: relative;
+        z-index: 1;
+        flex-shrink: 0;
+        font-family: var(--body);
+      }
+
+      .step-stepper__label {
+        margin-top: 8px;
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: var(--text);
+        opacity: 0.75;
+        text-align: center;
+        line-height: 1.4;
+      }
+
+      /* ─── Individual approach steps ─────────────────────────── */
+      .cs-step {
+        padding-top: 2.5rem;
+        border-top: 1px solid rgba(26, 26, 22, 0.1);
+        margin-top: 2.5rem;
+      }
+
+      .cs-step:first-of-type {
+        border-top: none;
+        margin-top: 0;
+        padding-top: 0;
+      }
+
+      .cs-step h3 {
+        margin: 0 0 0.85rem;
+        font-family: var(--headline);
+        font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+        font-weight: 600;
+        line-height: 1.2;
+        display: flex;
+        align-items: baseline;
+        gap: 0.65rem;
+      }
+
+      .cs-step-num {
+        font-size: 0.78rem;
+        font-family: var(--body);
+        font-weight: 600;
+        color: var(--accent);
+        letter-spacing: 0.04em;
+        flex-shrink: 0;
+      }
+
+      .cs-step-body {
+        margin: 0 0 1.75rem;
+        font-size: 1.04rem;
+        line-height: 1.7;
+        max-width: 68ch;
+        opacity: 0.95;
+      }
+
+      /* ─── Approach section ─────────────────────────────────── */
+
+      .cs-table-wrap {
+        max-width: 700px;
+        margin: 2.5rem auto 0;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #E8EBE4;
+      }
+
+      .cs-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.98rem;
+        line-height: 1.55;
+      }
+
+      .cs-table th {
+        background: #E8EBE4;
+        font-weight: 600;
+        padding: 0.85rem 1.1rem;
+        text-align: left;
+        font-family: var(--body);
+      }
+
+      .cs-table td {
+        padding: 0.95rem 1.1rem;
+        vertical-align: top;
+        border-top: 1px solid #E8EBE4;
+      }
+
+      .cs-table tbody tr:hover {
+        background: rgba(232, 235, 228, 0.4);
+      }
+
+      /* ─── Funnel diagram ────────────────────────────────────── */
+      .cs-funnel {
+        margin: 3rem auto 0;
+        max-width: 100%;
+      }
+
+      .cs-funnel-track {
+        display: flex;
+        align-items: flex-start;
+        gap: 0;
+      }
+
+      .cs-funnel-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .cs-funnel-box {
+        width: 100%;
+        background: rgba(74, 124, 89, 0.12);
+        border: 1.5px solid #4A7C59;
+        border-radius: 12px;
+        padding: 1rem 1.1rem;
+        font-size: 0.95rem;
+        text-align: center;
+        line-height: 1.45;
+      }
+
+      .cs-funnel-arrow {
+        flex-shrink: 0;
+        font-size: 1.4rem;
+        color: var(--text);
+        padding: 0 0.85rem;
+        line-height: 1;
+        align-self: flex-start;
+        margin-top: 1.1rem;
+      }
+
+      .cs-funnel-pct {
+        margin: 0;
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: var(--accent);
+        text-align: center;
+      }
+
+      /* ─── Insight rows ──────────────────────────────────────── */
+      .cs-insights {
+        max-width: 700px;
+        margin: 2.5rem auto 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+
+      .cs-insight {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.1rem;
+      }
+
+      .cs-insight-icon {
+        flex-shrink: 0;
+        width: 36px;
+        height: 36px;
+        background: #E8EBE4;
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+        font-size: 1rem;
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .cs-insight p {
+        margin: 0;
+        font-size: 0.98rem;
+        line-height: 1.65;
+        opacity: 0.95;
+      }
+
+      /* ─── Sticky notes diagram ─────────────────────────────── */
+      .sticky-diagram {
+        max-width: 700px;
+        margin: 2.5rem auto 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+
+      .sticky-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .sticky-card {
+        border-radius: 12px;
+        padding: 1rem 1.1rem 1.5rem;
+        font-size: 0.88rem;
+        line-height: 1.5;
+        color: #1a1a16;
+        position: relative;
+      }
+
+      .sticky-card--orange { background: #FFB347; }
+      .sticky-card--purple { background: #C9B8E8; }
+
+      .sticky-card-author {
+        display: block;
+        margin-top: 0.85rem;
+        font-size: 0.78rem;
+        opacity: 0.65;
+      }
+
+      .sticky-h-arrow {
+        flex-shrink: 0;
+        font-size: 1.35rem;
+        color: var(--text);
+        opacity: 0.6;
+        align-self: flex-start;
+        margin-top: 1.2rem;
+        padding: 0 0.25rem;
+        line-height: 1;
+      }
+
+      .sticky-v-arrow {
+        font-size: 1.35rem;
+        color: var(--text);
+        opacity: 0.6;
+        text-align: center;
+        line-height: 1;
+      }
+
+      /* ─── Step 3 image grid ────────────────────────────────── */
+      .cs-redesign-grid {
+        display: flex;
+        align-items: stretch;
+        gap: 48px;
+        margin-top: 2.5rem;
+      }
+
+      .cs-section-complete {
+        width: 100%;
+        height: auto;
+        display: block;
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+        border-radius: 8px;
+      }
+
+      /* ─── Media grids ───────────────────────────────────────── */
+      .cs-media-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.35rem;
+      }
+
+      figure, figure img, figcaption {
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+      }
+
+      .cs-figure--narrow {
+        width: 80%;
+        display: block;
+        margin: 2.5rem auto 0;
+      }
+
+      .cs-figure--narrow .cs-figcaption {
+        text-align: left;
+      }
+
+      .cs-img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 12px;
+        border: 1px solid rgba(26, 26, 22, 0.06);
+      }
+
+      .cs-img--full {
+        margin-top: 1.75rem;
+      }
+
+      .cs-figcaption {
+        margin: 0.55rem 0 0;
+        font-size: 0.875rem;
+        color: #5a5a52;
+        line-height: 1.5;
+      }
+
+      /* ─── Section 06 — Building for Scale ──────────────────── */
+      .cs-scale-frame {
+        background: #E8EBE4;
+        border-radius: 12px;
+        padding: 0;
+        max-width: 900px;
+        margin: 2.5rem auto 0;
+        overflow: hidden;
+      }
+
+      .cs-img--tilted {
+        width: 100%;
+        display: block;
+        transform: rotate(-2deg);
+        transform-origin: center center;
+        border-radius: 8px;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* ─── Results two-col ───────────────────────────────────── */
+      /* ─── Section 07 — Results & Reflection ───────────────── */
+      .cs-results-card {
+        background: #E8EBE4;
+        border-radius: 12px;
+        padding: 32px 40px;
+        max-width: 800px;
+        margin: 2rem auto;
+        text-align: left;
+      }
+
+      .cs-results-ol {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        counter-reset: results;
+        display: flex;
+        flex-direction: column;
+        gap: 1.4rem;
+      }
+
+      .cs-results-ol li {
+        counter-increment: results;
+      }
+
+      .cs-results-ol li strong {
+        display: block;
+        font-size: 0.95rem;
+        font-weight: 700;
+      }
+
+      .cs-results-ol li strong::before {
+        content: counter(results) ". ";
+      }
+
+      .cs-results-ol li p {
+        margin: 0.25rem 0 0;
+        font-size: 0.92rem;
+        line-height: 1.65;
+        opacity: 0.88;
+      }
+
+      .cs-results-mockup {
+        max-width: 700px;
+        margin: 2.5rem auto 0;
+      }
+
+      .cs-results-mockup img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border: none;
+      }
+
+      /* ─── Skills grid ───────────────────────────────────────── */
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.15rem;
+        margin-top: 1.75rem;
+      }
+
+      .skill-card {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 1.4rem 1.5rem;
+        background: var(--surface);
+        border-radius: 12px;
+      }
+
+      .skill-card .card-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .skill-card .card-header svg {
+        flex-shrink: 0;
+        display: block;
+      }
+
+      .skill-card h3 {
+        margin: 0;
+        padding: 0;
+        font-family: var(--body);
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent);
+        line-height: 1.2;
+      }
+
+      .skill-card p {
+        margin: 0;
+        padding: 0;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: var(--text);
+        text-align: left;
+      }
+
+      /* ─── Case nav ──────────────────────────────────────────── */
+      .case-nav-section {
+        padding: clamp(3rem, 5vw, 4.5rem) clamp(1.25rem, 5vw, 4rem);
+      }
+
+      .case-nav {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1.75rem;
+        border-top: 1px solid rgba(26, 26, 22, 0.12);
+      }
+
+      /* ─── Responsive ────────────────────────────────────────── */
+      @media (max-width: 52rem) {
+        .case-hero-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .case-meta-card {
+          transform: none;
+          max-width: 100%;
+          justify-self: start;
+          width: 100%;
+        }
+
+        .ba-slider {
+          aspect-ratio: 1924 / 1272;
+        }
+
+        .cs-media-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .cs-results-card {
+          padding: 24px;
+        }
+
+        .skills-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .step-stepper {
+          flex-direction: column;
+          gap: 0.85rem;
+        }
+
+        .step-stepper__item {
+          flex-direction: row;
+          align-items: center;
+          gap: 0.75rem;
+          flex: none;
+        }
+
+        .step-stepper__item:not(:last-child)::after {
+          display: none;
+        }
+
+        .step-stepper__label {
+          text-align: left;
+          margin-top: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <header class="site-header" aria-label="Primary">
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="../index.html#work" class="site-nav__back" style="margin-right: auto; opacity: 0.75;">← All Work</a>
+        <a href="../index.html#home">Home</a>
+        <a href="../index.html#work">Work</a>
+        <a href="../index.html#about">About</a>
+        <a href="../assets/cv/2026-03-24-Lebenslauf-Estelle-Bolin-UX-UI.pdf" target="_blank" rel="noopener noreferrer" aria-label="CV, opens in new tab">CV<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" focusable="false" style="margin-left: 3px; vertical-align: middle;"><path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
+        <a href="../index.html#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="main-content">
+
+      <!-- ── 1. HERO ──────────────────────────────────────────── -->
+      <section class="case-hero" aria-labelledby="case-title">
+        <div class="cs-inner">
+
+          <a class="case-back-link" href="../index.html#work">← All Work</a>
+
+          <div class="case-hero-grid">
+            <div class="case-hero-copy">
+              <p class="case-eyebrow">b2b · product design · data-informed ux</p>
+              <h1 id="case-title">
+                Redesigning the XING Job Ad Purchase Experience
+              </h1>
+              <p class="case-hero-desc">
+                How data, IA strategy and UX design came together to simplify
+                a B2B e-commerce flow.
+              </p>
+            </div>
+
+            <aside class="case-meta-card" aria-label="Case details">
+              <dl>
+                <div class="xing-meta-row">
+                  <dt>Company</dt>
+                  <dd>XING</dd>
+                </div>
+                <div class="xing-meta-row">
+                  <dt>Sector</dt>
+                  <dd>Recruiting, e-commerce</dd>
+                </div>
+                <div class="xing-meta-row">
+                  <dt>Year</dt>
+                  <dd>2025–2026</dd>
+                </div>
+                <div class="xing-meta-row">
+                  <dt>Role</dt>
+                  <dd>UX · IA · Data-informed Design</dd>
+                </div>
+              </dl>
+            </aside>
+          </div>
+
+          <!-- Before / After Slider -->
+          <figure class="ba-figure">
+            <!--
+              Screen-reader note: the range input provides full keyboard control.
+              Both images are described below the slider for assistive technology.
+            -->
+            <div
+              class="ba-slider"
+              id="ba-slider"
+              role="group"
+              aria-label="Before and after comparison: old vs. redesigned XING purchase flow"
+            >
+              <!-- After image (full width, bottom layer) -->
+              <div class="ba-after" aria-hidden="true">
+                <img
+                  src="../assets/xing/new-wireframe-crop.png"
+                  alt=""
+                />
+              </div>
+
+              <!-- Before image (clipped, top layer) -->
+              <div class="ba-before" aria-hidden="true">
+                <img
+                  src="../assets/xing/old-wireframe-crop.png"
+                  alt=""
+                />
+              </div>
+
+              <!-- Visual divider and handle -->
+              <div class="ba-divider" aria-hidden="true">
+                <span class="ba-handle">
+                  <svg
+                    width="18"
+                    height="14"
+                    viewBox="0 0 18 14"
+                    fill="none"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path
+                      d="M5 1L1 7L5 13M13 1L17 7L13 13"
+                      stroke="#4A7C59"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </span>
+              </div>
+
+              <span class="ba-label ba-label--before" aria-hidden="true">Before</span>
+              <span class="ba-label ba-label--after" aria-hidden="true">After</span>
+
+              <!-- Accessible range control -->
+              <label class="visually-hidden" for="ba-range">
+                Slide to compare: before and after redesign
+              </label>
+              <input
+                type="range"
+                id="ba-range"
+                class="ba-range"
+                min="0"
+                max="100"
+                value="50"
+                aria-valuenow="50"
+                aria-valuetext="50% before, 50% after"
+              />
+            </div>
+
+            <!-- Screen-reader description of both images -->
+            <p class="visually-hidden">
+              Before: The old purchase flow on recruiting.xing.com included a
+              dedicated pricing page between the product overview and checkout,
+              adding an unnecessary step for already-decided buyers.
+              After: The redesigned flow removes the standalone pricing page.
+              Pricing is integrated into the redesigned overview page, which
+              directs users straight to checkout — fewer steps, less friction.
+            </p>
+
+            <figcaption class="ba-caption">
+              Drag or use arrow keys to compare the old and redesigned purchase flow.
+            </figcaption>
+          </figure>
+
+        </div>
+      </section>
+
+      <!-- ── 2. THE CHALLENGE ──────────────────────────────────── -->
+      <section class="cs-section cs-section--centered" aria-labelledby="challenge-heading">
+        <div class="cs-inner">
+          <h2 id="challenge-heading">The Challenge</h2>
+
+          <p class="cs-lead">
+            With the launch of XING&apos;s new B2B portfolio, the Performance
+            Job Ad became a single standalone product. But the existing purchase
+            flow on recruiting.xing.com was still built for a multi-product
+            world — including a dedicated pricing page that added unnecessary
+            friction. Bounce rates were high, and users arriving at checkout
+            were already decided buyers who didn&apos;t need an extra step.
+          </p>
+
+          <figure class="cs-figure cs-figure--narrow" style="width:80%;display:block;margin:2.5rem auto 0;">
+            <img
+              class="cs-img"
+              src="../assets/xing/01-Idea-Solution-Impact.png"
+              alt="Three illustrated cards summarising the brief: Idea — introduce a new job ad and remove friction from a single-product purchase flow; Solution — merge pricing into the overview and redesign it as a conversion-ready page; Impact — simpler UX, clearer pricing, data-aligned with high-intent user behaviour."
+              style="height: auto;"
+            />
+            <figcaption class="cs-figcaption">
+              Idea, solution, and expected impact — the brief at a glance.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ── 3. THE APPROACH ───────────────────────────────────── -->
+      <section class="cs-section cs-section--centered" aria-labelledby="approach-heading">
+        <div class="cs-inner">
+          <h2 id="approach-heading">The Approach</h2>
+          <p class="cs-step-subtitle">Step 1 — Data-Informed Decision Making</p>
+
+          <p class="cs-lead" style="max-width:100%;">
+            I used Adobe Analytics and Tableau to analyze traffic sources, bounce rates,
+            and funnel drop-offs. The data showed 96% of overview page traffic came from
+            display ads — users with low awareness who needed convincing, not just a price.
+          </p>
+
+          <!-- Data table -->
+          <div class="cs-table-wrap" role="region" aria-label="Funnel analysis data">
+            <table class="cs-table">
+              <thead>
+                <tr>
+                  <th scope="col">Stage</th>
+                  <th scope="col">What happens</th>
+                  <th scope="col">Takeaways</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Overview (132k)</td>
+                  <td>Large audience, exploring, but many bounces (83%)</td>
+                  <td>Users explore the products</td>
+                </tr>
+                <tr>
+                  <td>Pricing page (~7.8k)</td>
+                  <td>Smaller, lower-funnel audience, but lower bounce (32%)</td>
+                  <td>Users might double-check details or confirm the product value</td>
+                </tr>
+                <tr>
+                  <td>Check out start (423)</td>
+                  <td>Very small volume, but high continuation (16%)</td>
+                  <td>Users are already committed — pricing is not a decision point anymore</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Funnel diagram -->
+          <div class="cs-funnel" aria-label="Conversion funnel from 132k overview visitors to 1577 checkout starts">
+            <div class="cs-funnel-track">
+              <div class="cs-funnel-col">
+                <div class="cs-funnel-box">~132k total traffic job ads overview</div>
+              </div>
+              <span class="cs-funnel-arrow" aria-hidden="true">→</span>
+              <div class="cs-funnel-col">
+                <div class="cs-funnel-box">~7,8k visits pricing page</div>
+                <p class="cs-funnel-pct">~6 %</p>
+              </div>
+              <span class="cs-funnel-arrow" aria-hidden="true">→</span>
+              <div class="cs-funnel-col">
+                <div class="cs-funnel-box">1577 check out funnel*</div>
+                <p class="cs-funnel-pct">~1.2 %</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Insights -->
+          <div class="cs-insights">
+            <div class="cs-insight">
+              <span class="cs-insight-icon" aria-hidden="true">→</span>
+              <p>Roughly <strong>6% of visitors</strong> go from overview to pricing, and <strong>~1.2%</strong> of total visitors reach check out. Very narrow funnel. Separate pricing step <strong>adds friction rather than value.</strong></p>
+            </div>
+            <div class="cs-insight">
+              <span class="cs-insight-icon" aria-hidden="true">→</span>
+              <p>This implies that pricing page isn&apos;t easy to find or users do not get enough information on overview to continue further down in the funnel.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── 4. STEP 2 — UX & IA DECISION ────────────────────── -->
+      <section class="cs-section cs-section--centered" aria-labelledby="step2-heading">
+        <div class="cs-inner">
+          <p class="cs-step-subtitle" id="step2-heading">Step 2 — UX &amp; IA Decision</p>
+
+          <p class="cs-lead" style="max-width:100%;">Based on the data, I recommended removing the standalone pricing page entirely and making the overview page do more work — functioning as both a landing page and a decision page in one step. For a single-product offering, a separate pricing step was adding friction without adding value. The goal was to get high-intent users to checkout faster, without losing the users who still needed convincing.</p>
+
+          <!-- Sticky note diagram -->
+          <div
+            class="sticky-diagram"
+            role="img"
+            aria-label="Sticky note diagram showing the reasoning: removing the pricing step helps users reach checkout faster; the overview page currently lacks convincing content; 96% of traffic comes from display ads with low awareness who need better information; and one price card keeps the page minimal and focused."
+          >
+            <!-- Left column: insight card + solution card -->
+            <div class="sticky-col">
+              <div class="sticky-card sticky-card--orange">
+                Removing extra pricing step is beneficial and users can arrive to high-intent stage earlier.
+
+              </div>
+              <div class="sticky-card sticky-card--purple">
+                One price card keeps it minimal and should provide why this product matters and what it delivers.
+
+              </div>
+            </div>
+
+            <!-- Middle column: problem card -->
+            <div class="sticky-col">
+              <div class="sticky-card sticky-card--orange">
+                Overview page: right now, we lack to convince users.
+
+              </div>
+            </div>
+
+            <!-- Horizontal arrow -->
+            <span class="sticky-h-arrow" aria-hidden="true">→</span>
+
+            <!-- Right column: traffic insight + consequence -->
+            <div class="sticky-col">
+              <div class="sticky-card sticky-card--orange">
+                Distribution on traffic channel on overview page shows: most users come from display (96%), some from paid social.
+
+              </div>
+              <div class="sticky-v-arrow" aria-hidden="true">↓</div>
+              <div class="sticky-card sticky-card--orange">
+                These users have low awareness and need to be better informed.
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation screenshot -->
+          <figure class="cs-figure cs-figure--narrow" style="margin-top: 3rem;">
+            <div style="background: #fff; border-radius: 12px; padding: 1.5rem;">
+              <img
+                class="cs-img"
+                src="../assets/xing/03-Navigation.png"
+                alt="XING Stellenanzeigen sub-navigation bar with tabs: Übersicht, Funktionen, Preise (highlighted), Erfolgsgeschichten, FAQ, Hilfe & Training — showing pricing integrated as an anchor in the navigation instead of a standalone page."
+                style="width: 100%; height: auto;"
+              />
+            </div>
+            <figcaption style="font-size: 0.875rem; color: #5a5a52; text-align: left; margin-top: 12px;">
+              Revision of navigation for improved user experience.
+            </figcaption>
+          </figure>
+
+        </div>
+      </section>
+
+      <!-- ── 5. STEP 3 — OVERVIEW PAGE REDESIGN ──────────────── -->
+      <section class="cs-section cs-section--centered" aria-labelledby="step3-heading">
+        <div class="cs-inner">
+          <p class="cs-step-subtitle" id="step3-heading">Step 3 — Overview Page Redesign</p>
+
+          <p class="cs-lead" style="max-width:100%;">
+            I redesigned the overview page with a clearer value proposition for cold traffic,
+            early and transparent pricing visibility, improved information hierarchy and
+            scannability, and a better mobile layout fixing prior usability issues.
+          </p>
+          <p class="cs-lead" style="max-width:100%;">
+            The new flow removed the pricing page entirely and redirected users straight from
+            the overview page to checkout. The overview page was redesigned to carry more
+            weight — convincing, informing, and converting in one step.
+          </p>
+
+          <div class="cs-redesign-grid">
+            <img
+              src="../assets/xing/05-section-complete.png"
+              alt="Redesigned XING overview page — desktop and mobile showing new pricing card, improved information hierarchy, clearer value proposition and improved mobile layout"
+              class="cs-section-complete"
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- ── 6. BUILDING FOR SCALE ─────────────────────────────── -->
+      <section class="cs-section cs-section--centered" aria-labelledby="scale-heading">
+        <div class="cs-inner">
+          <h2 id="scale-heading">Building for Scale</h2>
+
+          <p class="cs-lead" style="max-width:100%;">
+            Because recruiting.xing.com had no existing Figma history and B2B
+            products operate outside the XING B2C design system, I built a
+            clean component library from scratch. Components were aligned with
+            CI and brand identity but given slight B2B-appropriate adjustments.
+          </p>
+          <p class="cs-lead" style="max-width:100%;">
+            Reusable components for the pricing card, hero carousel, navigation,
+            headers, and FAQ sections ensure that future product extensions or
+            team members can build consistently — without starting from zero
+            every time.
+          </p>
+
+          <figure class="cs-figure">
+            <div class="cs-scale-frame">
+              <img
+                class="cs-img--tilted"
+                src="../assets/xing/card scalable.png"
+                alt="Overview of the B2B Component Kit built in Figma: includes pricing card variants, hero sections with stat cards, feature list rows, navigation patterns, FAQ components, testimonial blocks, partner logo strips, and responsive mobile versions of each component."
+              />
+            </div>
+            <figcaption class="cs-figcaption" style="text-align:left;max-width:900px;margin-left:auto;margin-right:auto;">
+              Component library supporting scalable future extensions.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ── 7. RESULTS & REFLECTION ───────────────────────────── -->
+      <section class="cs-section cs-section--centered" aria-labelledby="results-heading">
+        <div class="cs-inner">
+          <h2 id="results-heading">Results &amp; Reflection</h2>
+
+          <p class="cs-lead" style="max-width:800px;margin-left:auto;margin-right:auto;">
+            Since I had to leave the company before the changes were fully rolled out,
+            I was not able to measure the impact of the redesigned purchase flow on
+            real user behavior.
+          </p>
+          <p class="cs-lead" style="max-width:800px;margin-left:auto;margin-right:auto;">
+            If I had stayed, I would have closely monitored the following metrics to
+            validate the success of the solution and iterate further.
+          </p>
+
+          <div class="cs-results-card">
+            <ol class="cs-results-ol">
+              <li>
+                <strong>CTR from Overview → Checkout</strong>
+                <p>To verify whether removing the pricing step helped users reach the high-intent stage earlier.</p>
+              </li>
+              <li>
+                <strong>Visits to the Overview Page vs. Checkout Start</strong>
+                <p>To assess whether more users progressed into the funnel compared to the previous structure.</p>
+              </li>
+              <li>
+                <strong>Bounce Rate on the Overview Page</strong>
+                <p>To evaluate whether improved value communication, pricing visibility, and hierarchy reduced early drop-offs.</p>
+              </li>
+              <li>
+                <strong>Checkout Funnel Progression</strong>
+                <p>To ensure that simplifying the entry point did not negatively affect downstream completion rates.</p>
+              </li>
+            </ol>
+          </div>
+
+          <figure class="cs-figure cs-results-mockup">
+            <img
+              src="../assets/xing/07-result.png"
+              alt="Desktop and mobile mockup showing the final redesigned XING Stellenanzeigen overview page. The desktop version shows the hero with headline, key statistics, and a call-to-action. The mobile version shows the same content in a responsive single-column layout."
+            />
+            <figcaption class="cs-figcaption" style="text-align:left;">
+              Final result: the redesigned overview page on desktop and mobile.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ── 6. SKILLS DEMONSTRATED ─────────────────────────────── -->
+      <section class="cs-section" aria-labelledby="skills-heading">
+        <div class="cs-inner">
+          <h2 id="skills-heading" style="text-align: center;">Skills Demonstrated</h2>
+
+          <div class="skills-grid" aria-label="Skills demonstrated in this project">
+            <article class="skill-card">
+              <div class="card-header">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4A7C59" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="18" y1="20" x2="18" y2="10"/>
+                  <line x1="12" y1="20" x2="12" y2="4"/>
+                  <line x1="6" y1="20" x2="6" y2="14"/>
+                  <line x1="2" y1="20" x2="22" y2="20"/>
+                </svg>
+                <h3>Data-informed UX</h3>
+              </div>
+              <p>Using Adobe Analytics and Tableau to validate design decisions without direct user testing — and knowing which data gaps to call out.</p>
+            </article>
+            <article class="skill-card">
+              <div class="card-header">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4A7C59" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="6" y1="3" x2="6" y2="15"/>
+                  <circle cx="18" cy="6" r="3"/>
+                  <circle cx="6" cy="18" r="3"/>
+                  <path d="M18 9a9 9 0 0 1-9 9"/>
+                </svg>
+                <h3>Purchase Flow &amp; IA Optimisation</h3>
+              </div>
+              <p>Simplifying a B2B e-commerce flow by questioning inherited architecture and designing toward conversion rather than convention.</p>
+            </article>
+            <article class="skill-card">
+              <div class="card-header">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4A7C59" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                  <polyline points="2 17 12 22 22 17"/>
+                  <polyline points="2 12 12 17 22 12"/>
+                </svg>
+                <h3>Scalable Design Systems</h3>
+              </div>
+              <p>Building a component library from scratch — aligned with brand identity and structured for handover and future team use.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── CASE NAV + FOOTER ────────────────────────────────── -->
+      <section class="case-nav-section" aria-label="Case study navigation">
+        <div class="case-nav">
+          <a class="contact-link" href="../index.html#work">← All Work</a>
+          <a class="contact-link" href="case-telekom.html" aria-label="Next case: Telekom's Miniatur Warmland">Next Case: Telekom's Miniatur Warmland →</a>
+        </div>
+
+        <footer class="site-footer" aria-label="Site footer">
+          © 2026 Estelle Bolin · Built with Claude · <a href="/impressum.html">Impressum</a>
+        </footer>
+      </section>
+
+    </main>
+
+    <script>
+      (function () {
+        var slider = document.getElementById('ba-slider');
+        if (!slider) return;
+
+        var range = slider.querySelector('.ba-range');
+        var beforeDiv = slider.querySelector('.ba-before');
+        var beforeImg = beforeDiv ? beforeDiv.querySelector('img') : null;
+        var divider = slider.querySelector('.ba-divider');
+
+        if (!range || !beforeDiv || !beforeImg || !divider) return;
+
+        var prefersReduced = window.matchMedia(
+          '(prefers-reduced-motion: reduce)'
+        ).matches;
+
+        function update(val) {
+          var pct = Math.min(100, Math.max(0, val));
+          beforeDiv.style.width = pct + '%';
+          beforeImg.style.width = slider.offsetWidth + 'px';
+          divider.style.left = pct + '%';
+          range.setAttribute('aria-valuenow', String(Math.round(pct)));
+          range.setAttribute(
+            'aria-valuetext',
+            Math.round(pct) + '% before, ' + Math.round(100 - pct) + '% after'
+          );
+        }
+
+        // Range input handles mouse, touch, and keyboard natively
+        range.addEventListener('input', function () {
+          update(Number(this.value));
+        });
+
+        // Initial render
+        update(50);
+
+        // Stay correct on resize
+        if (window.ResizeObserver) {
+          new ResizeObserver(function () {
+            update(Number(range.value));
+          }).observe(slider);
+        }
+
+      })();
+    </script>
+<script src="../script.js"></script>
+  </body>
+</html>
