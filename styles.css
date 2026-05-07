@@ -1,7 +1,7 @@
 :root {
   --bg: #f8f8f4;
   --text: #1a1a16;
-  --accent: #4a7c59;
+  --accent: #3D6B4A;
   --surface: #e8ebe4;
   --headline: "Cormorant Garamond", Georgia, "Times New Roman", serif;
   --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -606,7 +606,7 @@ h3 {
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #4A7C59;
+  color: var(--accent);
   margin-bottom: 16px;
 }
 .companies-row {
@@ -801,7 +801,7 @@ h3 {
   flex-shrink: 0;
   font-family: 'Cormorant Garamond', serif;
   font-size: 60px;
-  color: #4A7C59;
+  color: var(--accent);
   line-height: 0.8;
   margin-top: 4px;
 }
@@ -961,7 +961,7 @@ h3 {
 .case-meta-label {
   margin: 0;
   font-size: 13px;
-  color: #4A7C59;
+  color: var(--accent);
   font-weight: 600;
 }
 
