@@ -131,6 +131,7 @@ button:focus-visible,
   color: var(--text);
   opacity: 0.88;
   transition: opacity 160ms ease;
+  padding: 0.6rem 0.25rem;
 }
 
 .site-nav a:hover,
@@ -214,8 +215,8 @@ h3 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
+  min-width: 44px;
+  min-height: 44px;
   padding: 0;
   border-radius: 8px;
   background: transparent;
@@ -272,6 +273,8 @@ h3 {
   opacity: 0.62;
   text-transform: lowercase;
   letter-spacing: 0.01em;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .scroll-indicator:hover,
@@ -686,7 +689,7 @@ h3 {
   color: var(--accent);
   border: 1.5px solid var(--accent);
   font-size: 0.98rem;
-  line-height: 1;
+  line-height: 1.4;
   letter-spacing: 0.005em;
   text-decoration: none;
   cursor: pointer;
