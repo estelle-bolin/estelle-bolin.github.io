@@ -98,6 +98,12 @@ if (referencesToggleBtn && referencesToggleLessBtn && referencesMoreEl) {
     referencesToggleBtn.setAttribute("hidden", "");
     referencesToggleLessBtn.removeAttribute("hidden");
     referencesToggleBtn.setAttribute("aria-expanded", "true");
+    if (window.matchMedia("(max-width: 48rem)").matches) {
+      document.querySelectorAll(".reference-card").forEach(card => {
+        card.style.display = "block";
+      });
+    }
+    referencesToggleBtn.style.display = "none";
   });
 
   referencesToggleLessBtn.addEventListener("click", () => {
@@ -105,5 +111,11 @@ if (referencesToggleBtn && referencesToggleLessBtn && referencesMoreEl) {
     referencesToggleLessBtn.setAttribute("hidden", "");
     referencesToggleBtn.removeAttribute("hidden");
     referencesToggleBtn.setAttribute("aria-expanded", "false");
+    referencesToggleBtn.style.display = "";
+    if (window.matchMedia("(max-width: 48rem)").matches) {
+      document.querySelectorAll(".reference-card").forEach(card => {
+        card.style.display = "";
+      });
+    }
   });
 }

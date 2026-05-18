@@ -1103,6 +1103,14 @@ h3 {
     padding: 20px;
   }
 
+  .reference-card:not(:first-child) {
+    display: none;
+  }
+
+  .references-show-more {
+    display: block;
+  }
+
   .reference-opening-quote {
     font-size: 60px;
     margin-top: 4px;
