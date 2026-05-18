@@ -459,14 +459,6 @@ h3 {
     min-width: auto;
     white-space: normal;
   }
-
-  .hero-tagline {
-    text-align: left;
-  }
-
-  .hero p {
-    text-align: left !important;
-  }
 }
 
 .about {
