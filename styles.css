@@ -26,6 +26,7 @@ body {
   font-family: var(--body);
   line-height: 1.7;
   letter-spacing: 0.005em;
+  overflow-x: hidden;
 }
 
 .cs-section p,
@@ -445,6 +446,19 @@ h3 {
   .case-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
+  }
+
+  .rotating-word-wrap {
+    min-width: auto;
+    white-space: normal;
+  }
+
+  .hero-tagline {
+    text-align: left;
+  }
+
+  .hero p {
+    text-align: left !important;
   }
 }
 
